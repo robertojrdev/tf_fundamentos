@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>main API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>main</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import pygame
+from vector2 import *
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((800,600))
+
+    views = []
+    # game = Game(3, 4, screen)
+    # views.append(game)
+    menu = Menu(screen)
+    views.append(menu)
+
+    while(True):
+        # Process OS events
+        evt = pygame.event.get()
+        for event in evt:
+            # Checks if the user closed the window
+            if (event.type == pygame.QUIT):
+                # Exits the application immediately
+                return
+            elif (event.type == pygame.KEYDOWN):
+                if (event.key == pygame.K_ESCAPE):
+                    return
+
+        Input.update(evt)
+
+        screen.fill((0,100,0))
+
+        # update(screen)
+        for v in views:
+            v.draw(screen)
+
+        pygame.display.flip()
+
+def update(screen):
+    pass
+    
+class View:
+    is_visible = True
+
+    def draw(self, screen):
+        if(self.is_visible == True):
+            self.on_draw(screen)
+    
+    def on_draw(self, screen):
+        pass
+
+    def set_visible(self, visible):
+        self.is_visible = visible
+
+class Menu(View):
+    def __init__(self, screen):
+        self.buttons = []
+        size = vector2(150, 50)
+        rows = 6
+        dist_offset = 10
+        offset = vector2()
+        offset.x = (screen.get_width() - size.x)/2
+        offset.y = (screen.get_height() - ((rows - 1) * dist_offset + rows * size.y)) / 2
+
+
+        #create buttons and add to buttons array
+        for y in range(rows):
+            pos = vector2(offset.x, (y * (dist_offset + size.y) + offset.y))
+            b = TextButton(pos, size, &#34;button&#34;, &#34;4 X 4&#34;)
+            b.on_click = lambda b=self : b.set_visible(False)
+            self.buttons.append(b)
+
+    def on_draw(self, screen):
+        for b in self.buttons:
+            b.draw(screen)
+
+class Game(View):
+    def __init__(self, rows, columns, screen):
+        &#34;&#34;&#34;Ganda main pa
+        
+        Arguments:
+            rows {int} -- This is a nice row
+            columns {idk} -- fds pa
+            screen {mto_facile} -- é um ecrã, ta a espera de quê crlh
+        &#34;&#34;&#34;
+        self.cards = []
+        cards_offset = 10
+        size = vector2(50, 100)
+        offset = vector2()
+        offset.x = (screen.get_width() - ((columns -1) * cards_offset + columns * size.x)) / 2
+        offset.y = (screen.get_height() - ((rows -1) * cards_offset + rows * size.y)) / 2
+
+        for x in range(columns):
+            for y in range(rows):
+                p = vector2()
+                p.x = x * (cards_offset + size.x) + offset.x
+                p.y = y * (cards_offset + size.y) + offset.y
+                c = Button(p, size, str(y * columns + x))
+                c.on_click = lambda b=c : print(b.id)
+                self.cards.append(c)
+
+    def on_draw(self, screen):
+        for c in self.cards:
+            c.draw(screen)
+
+class Button:
+    def __init__(self, position, size, id, color = (150,150,150)):
+        self.position = position
+        self.size = size
+        self.id = id
+        self.color = color
+        self.hover_color = (150, 0, 0)
+        self.mouse_down_color = (0, 150, 0)
+        self.mouse_down = False
+        self.on_click = None
+
+    def draw(self, screen):
+        color = self.color
+        hovering = self.is_hovering()
+        if(hovering == True):
+            if(Input.get_mouse == True):
+                color = self.mouse_down_color
+                self.mouse_down = True
+            else:
+                if(self.mouse_down == True):
+                    self.click()
+
+                color = self.hover_color
+                self.mouse_down = False
+        else:
+            self.mouse_down = False
+
+        p = (self.position.x, self.position.y, self.size.x, self.size.y)
+        pygame.draw.rect(screen, color, p)
+
+    def click(self):
+        if(self.on_click):
+            self.on_click()
+
+    def is_hovering(self):
+        mousePos = pygame.mouse.get_pos()
+        min_x = self.position.x
+        min_y = self.position.y
+        max_x = self.position.x + self.size.x
+        max_y = self.position.y + self.size.y
+        if(mousePos[0] &gt; min_x) and (mousePos[0] &lt; max_x) &amp; (mousePos[1] &gt; min_y) and (mousePos[1] &lt; max_y):
+            return True
+        else:
+            return False
+
+class TextButton(Button):
+    def __init__(self, position, size, id, text = &#34;Button&#34;, color = (150,150,150)):
+        super().__init__(position, size, id, color)
+        self.text = text
+
+class Input:
+    get_mouse = False
+    get_mouse_down = False
+    get_mouse_up = False
+
+    @staticmethod
+    def update(evt):
+        
+        Input.get_mouse_down = False
+        Input.get_mouse_up = False
+
+        for e in evt:
+            if e.type == pygame.MOUSEBUTTONDOWN:
+                Input.get_mouse_down = True
+                Input.get_mouse = True
+                Input.get_mouse_up = False
+            elif e.type == pygame.MOUSEBUTTONUP:
+                Input.get_mouse_down = False
+                Input.get_mouse = False
+                Input.get_mouse_up = True
+
+main()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="main.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main():
+    pygame.init()
+    screen = pygame.display.set_mode((800,600))
+
+    views = []
+    # game = Game(3, 4, screen)
+    # views.append(game)
+    menu = Menu(screen)
+    views.append(menu)
+
+    while(True):
+        # Process OS events
+        evt = pygame.event.get()
+        for event in evt:
+            # Checks if the user closed the window
+            if (event.type == pygame.QUIT):
+                # Exits the application immediately
+                return
+            elif (event.type == pygame.KEYDOWN):
+                if (event.key == pygame.K_ESCAPE):
+                    return
+
+        Input.update(evt)
+
+        screen.fill((0,100,0))
+
+        # update(screen)
+        for v in views:
+            v.draw(screen)
+
+        pygame.display.flip()</code></pre>
+</details>
+</dd>
+<dt id="main.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(screen):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="main.Button"><code class="flex name class">
+<span>class <span class="ident">Button</span></span>
+<span>(</span><span>position, size, id, color=(150, 150, 150))</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Button:
+    def __init__(self, position, size, id, color = (150,150,150)):
+        self.position = position
+        self.size = size
+        self.id = id
+        self.color = color
+        self.hover_color = (150, 0, 0)
+        self.mouse_down_color = (0, 150, 0)
+        self.mouse_down = False
+        self.on_click = None
+
+    def draw(self, screen):
+        color = self.color
+        hovering = self.is_hovering()
+        if(hovering == True):
+            if(Input.get_mouse == True):
+                color = self.mouse_down_color
+                self.mouse_down = True
+            else:
+                if(self.mouse_down == True):
+                    self.click()
+
+                color = self.hover_color
+                self.mouse_down = False
+        else:
+            self.mouse_down = False
+
+        p = (self.position.x, self.position.y, self.size.x, self.size.y)
+        pygame.draw.rect(screen, color, p)
+
+    def click(self):
+        if(self.on_click):
+            self.on_click()
+
+    def is_hovering(self):
+        mousePos = pygame.mouse.get_pos()
+        min_x = self.position.x
+        min_y = self.position.y
+        max_x = self.position.x + self.size.x
+        max_y = self.position.y + self.size.y
+        if(mousePos[0] &gt; min_x) and (mousePos[0] &lt; max_x) &amp; (mousePos[1] &gt; min_y) and (mousePos[1] &lt; max_y):
+            return True
+        else:
+            return False</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="main.TextButton" href="#main.TextButton">TextButton</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="main.Button.click"><code class="name flex">
+<span>def <span class="ident">click</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def click(self):
+    if(self.on_click):
+        self.on_click()</code></pre>
+</details>
+</dd>
+<dt id="main.Button.draw"><code class="name flex">
+<span>def <span class="ident">draw</span></span>(<span>self, screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def draw(self, screen):
+    color = self.color
+    hovering = self.is_hovering()
+    if(hovering == True):
+        if(Input.get_mouse == True):
+            color = self.mouse_down_color
+            self.mouse_down = True
+        else:
+            if(self.mouse_down == True):
+                self.click()
+
+            color = self.hover_color
+            self.mouse_down = False
+    else:
+        self.mouse_down = False
+
+    p = (self.position.x, self.position.y, self.size.x, self.size.y)
+    pygame.draw.rect(screen, color, p)</code></pre>
+</details>
+</dd>
+<dt id="main.Button.is_hovering"><code class="name flex">
+<span>def <span class="ident">is_hovering</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_hovering(self):
+    mousePos = pygame.mouse.get_pos()
+    min_x = self.position.x
+    min_y = self.position.y
+    max_x = self.position.x + self.size.x
+    max_y = self.position.y + self.size.y
+    if(mousePos[0] &gt; min_x) and (mousePos[0] &lt; max_x) &amp; (mousePos[1] &gt; min_y) and (mousePos[1] &lt; max_y):
+        return True
+    else:
+        return False</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="main.Game"><code class="flex name class">
+<span>class <span class="ident">Game</span></span>
+<span>(</span><span>rows, columns, screen)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Ganda main pa</p>
+<h2 id="arguments">Arguments</h2>
+<p>rows {int} &ndash; This is a nice row
+columns {idk} &ndash; fds pa
+screen {mto_facile} &ndash; é um ecrã, ta a espera de quê crlh</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Game(View):
+    def __init__(self, rows, columns, screen):
+        &#34;&#34;&#34;Ganda main pa
+        
+        Arguments:
+            rows {int} -- This is a nice row
+            columns {idk} -- fds pa
+            screen {mto_facile} -- é um ecrã, ta a espera de quê crlh
+        &#34;&#34;&#34;
+        self.cards = []
+        cards_offset = 10
+        size = vector2(50, 100)
+        offset = vector2()
+        offset.x = (screen.get_width() - ((columns -1) * cards_offset + columns * size.x)) / 2
+        offset.y = (screen.get_height() - ((rows -1) * cards_offset + rows * size.y)) / 2
+
+        for x in range(columns):
+            for y in range(rows):
+                p = vector2()
+                p.x = x * (cards_offset + size.x) + offset.x
+                p.y = y * (cards_offset + size.y) + offset.y
+                c = Button(p, size, str(y * columns + x))
+                c.on_click = lambda b=c : print(b.id)
+                self.cards.append(c)
+
+    def on_draw(self, screen):
+        for c in self.cards:
+            c.draw(screen)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="main.View" href="#main.View">View</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="main.Game.on_draw"><code class="name flex">
+<span>def <span class="ident">on_draw</span></span>(<span>self, screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on_draw(self, screen):
+    for c in self.cards:
+        c.draw(screen)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="main.View" href="#main.View">View</a></b></code>:
+<ul class="hlist">
+<li><code><a title="main.View.is_visible" href="#main.View.is_visible">is_visible</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="main.Input"><code class="flex name class">
+<span>class <span class="ident">Input</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Input:
+    get_mouse = False
+    get_mouse_down = False
+    get_mouse_up = False
+
+    @staticmethod
+    def update(evt):
+        
+        Input.get_mouse_down = False
+        Input.get_mouse_up = False
+
+        for e in evt:
+            if e.type == pygame.MOUSEBUTTONDOWN:
+                Input.get_mouse_down = True
+                Input.get_mouse = True
+                Input.get_mouse_up = False
+            elif e.type == pygame.MOUSEBUTTONUP:
+                Input.get_mouse_down = False
+                Input.get_mouse = False
+                Input.get_mouse_up = True</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="main.Input.get_mouse"><code class="name">var <span class="ident">get_mouse</span></code></dt>
+<dd>
+<section class="desc"><p>bool(x) -&gt; bool</p>
+<p>Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.</p></section>
+</dd>
+<dt id="main.Input.get_mouse_down"><code class="name">var <span class="ident">get_mouse_down</span></code></dt>
+<dd>
+<section class="desc"><p>bool(x) -&gt; bool</p>
+<p>Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.</p></section>
+</dd>
+<dt id="main.Input.get_mouse_up"><code class="name">var <span class="ident">get_mouse_up</span></code></dt>
+<dd>
+<section class="desc"><p>bool(x) -&gt; bool</p>
+<p>Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.</p></section>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="main.Input.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>evt)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def update(evt):
+    
+    Input.get_mouse_down = False
+    Input.get_mouse_up = False
+
+    for e in evt:
+        if e.type == pygame.MOUSEBUTTONDOWN:
+            Input.get_mouse_down = True
+            Input.get_mouse = True
+            Input.get_mouse_up = False
+        elif e.type == pygame.MOUSEBUTTONUP:
+            Input.get_mouse_down = False
+            Input.get_mouse = False
+            Input.get_mouse_up = True</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="main.Menu"><code class="flex name class">
+<span>class <span class="ident">Menu</span></span>
+<span>(</span><span>screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Menu(View):
+    def __init__(self, screen):
+        self.buttons = []
+        size = vector2(150, 50)
+        rows = 6
+        dist_offset = 10
+        offset = vector2()
+        offset.x = (screen.get_width() - size.x)/2
+        offset.y = (screen.get_height() - ((rows - 1) * dist_offset + rows * size.y)) / 2
+
+
+        #create buttons and add to buttons array
+        for y in range(rows):
+            pos = vector2(offset.x, (y * (dist_offset + size.y) + offset.y))
+            b = TextButton(pos, size, &#34;button&#34;, &#34;4 X 4&#34;)
+            b.on_click = lambda b=self : b.set_visible(False)
+            self.buttons.append(b)
+
+    def on_draw(self, screen):
+        for b in self.buttons:
+            b.draw(screen)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="main.View" href="#main.View">View</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="main.Menu.on_draw"><code class="name flex">
+<span>def <span class="ident">on_draw</span></span>(<span>self, screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on_draw(self, screen):
+    for b in self.buttons:
+        b.draw(screen)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="main.View" href="#main.View">View</a></b></code>:
+<ul class="hlist">
+<li><code><a title="main.View.is_visible" href="#main.View.is_visible">is_visible</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="main.TextButton"><code class="flex name class">
+<span>class <span class="ident">TextButton</span></span>
+<span>(</span><span>position, size, id, text='Button', color=(150, 150, 150))</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TextButton(Button):
+    def __init__(self, position, size, id, text = &#34;Button&#34;, color = (150,150,150)):
+        super().__init__(position, size, id, color)
+        self.text = text</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="main.Button" href="#main.Button">Button</a></li>
+</ul>
+</dd>
+<dt id="main.View"><code class="flex name class">
+<span>class <span class="ident">View</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class View:
+    is_visible = True
+
+    def draw(self, screen):
+        if(self.is_visible == True):
+            self.on_draw(screen)
+    
+    def on_draw(self, screen):
+        pass
+
+    def set_visible(self, visible):
+        self.is_visible = visible</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="main.Menu" href="#main.Menu">Menu</a></li>
+<li><a title="main.Game" href="#main.Game">Game</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="main.View.is_visible"><code class="name">var <span class="ident">is_visible</span></code></dt>
+<dd>
+<section class="desc"><p>bool(x) -&gt; bool</p>
+<p>Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="main.View.draw"><code class="name flex">
+<span>def <span class="ident">draw</span></span>(<span>self, screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def draw(self, screen):
+    if(self.is_visible == True):
+        self.on_draw(screen)</code></pre>
+</details>
+</dd>
+<dt id="main.View.on_draw"><code class="name flex">
+<span>def <span class="ident">on_draw</span></span>(<span>self, screen)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on_draw(self, screen):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="main.View.set_visible"><code class="name flex">
+<span>def <span class="ident">set_visible</span></span>(<span>self, visible)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_visible(self, visible):
+    self.is_visible = visible</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="main.main" href="#main.main">main</a></code></li>
+<li><code><a title="main.update" href="#main.update">update</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="main.Button" href="#main.Button">Button</a></code></h4>
+<ul class="">
+<li><code><a title="main.Button.click" href="#main.Button.click">click</a></code></li>
+<li><code><a title="main.Button.draw" href="#main.Button.draw">draw</a></code></li>
+<li><code><a title="main.Button.is_hovering" href="#main.Button.is_hovering">is_hovering</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="main.Game" href="#main.Game">Game</a></code></h4>
+<ul class="">
+<li><code><a title="main.Game.on_draw" href="#main.Game.on_draw">on_draw</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="main.Input" href="#main.Input">Input</a></code></h4>
+<ul class="">
+<li><code><a title="main.Input.get_mouse" href="#main.Input.get_mouse">get_mouse</a></code></li>
+<li><code><a title="main.Input.get_mouse_down" href="#main.Input.get_mouse_down">get_mouse_down</a></code></li>
+<li><code><a title="main.Input.get_mouse_up" href="#main.Input.get_mouse_up">get_mouse_up</a></code></li>
+<li><code><a title="main.Input.update" href="#main.Input.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="main.Menu" href="#main.Menu">Menu</a></code></h4>
+<ul class="">
+<li><code><a title="main.Menu.on_draw" href="#main.Menu.on_draw">on_draw</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="main.TextButton" href="#main.TextButton">TextButton</a></code></h4>
+</li>
+<li>
+<h4><code><a title="main.View" href="#main.View">View</a></code></h4>
+<ul class="">
+<li><code><a title="main.View.draw" href="#main.View.draw">draw</a></code></li>
+<li><code><a title="main.View.is_visible" href="#main.View.is_visible">is_visible</a></code></li>
+<li><code><a title="main.View.on_draw" href="#main.View.on_draw">on_draw</a></code></li>
+<li><code><a title="main.View.set_visible" href="#main.View.set_visible">set_visible</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
