@@ -5,13 +5,15 @@ from vector2 import *
 
 ROUTINES = []
 DELTA_TIME = 0
+END = False
 
 def main():
     global ROUTINES
     global DELTA_TIME
+    global END
     pygame.init()
     pygame.font.init()
-    screen = pygame.display.set_mode((int(800 * 1.5),int(600 * 1.5)))
+    screen = pygame.display.set_mode((int(800 * 1.5),int(500 * 1.5)))
 
     
     views = []
@@ -29,7 +31,7 @@ def main():
 
     finishedRoutines = []
     lastTime = time.time()
-    while(True):
+    while(END == False):
         # Process OS events
         evt = pygame.event.get()
         for event in evt:
@@ -86,6 +88,7 @@ class Menu(View):
     def __init__(self, screen, game):
         super().__init__()
         
+        global END
         self.game = game
 
         size = vector2(150, 50)
@@ -104,15 +107,16 @@ class Menu(View):
             b.on_click = lambda menu=self, mode=mode : menu.start_game(mode)
             self.childs.append(b)
 
+        pos = vector2(offset.x, ((rows +1) * (dist_offset + size.y) + offset.y))
+        exit_button = TextButton(pos, size, "Exit")
+        exit_button.on_click = lambda : exit()
+        self.childs.append(exit_button)
+
     def start_game(self, mode):
         self.game.new_game(mode[0], mode[1])
         self.is_visible = False
         self.game.is_visible = True
-        self.game.on_win = lambda game=self.game, menu=self : menu.show_menu(game)
-
-    def show_menu(self, game):
-        self.is_visible = True
-        game.is_visible = False
+        self.game.on_exit = lambda menu=self : menu.set_visible(True)
 
 class Text(View):
     align_left = "left"
@@ -173,21 +177,39 @@ class Game(View):
         self.cards_offset = 10
         self.card_size = vector2(50, 100)
         self.selected_cards = []
-        self.on_win = None
+        self.on_exit = None
         self.score = 0
         self.wrong_attempts = 0
 
+        # SCORE
         self.score_text = Text(Rect(vector2(20,20), vector2(150,50)), Game.defaultScoreText + str(self.score))
         self.score_text.justify = Text.justify_up
         self.score_text.align = Text.align_left
         self.childs.append(self.score_text)
 
+        # EXIT BUTTON
+        x, y = screen.get_size()
+        exit_button = TextButton(vector2(0 + 50, y -100), vector2(150, 50), "Exit")
+        exit_button.on_click = lambda game = self : game.on_exit_game()
+        self.childs.append(exit_button)
+
+        # WIN TEXT
+        self.win_text = Text(Rect(vector2(0, 0), vector2(x,y)), "Congratulations")
+        self.childs.append(self.win_text)
+
         if rows != 0 and columns != 0:
             self.new_game(rows, columns)
 
     def new_game(self, rows, columns):
-        self.cards.clear()
         global ROUTINES
+
+        #RESET GAME
+        self.cards.clear()
+        self.score = 0
+        self.selected_cards.clear()
+        self.wrong_attempts = 0
+        self.score_text.text = Game.defaultScoreText + "0"
+        self.win_text.is_visible = False
 
         offset = vector2()
         offset.x = (self.screen.get_width() - ((columns -1) * self.cards_offset + columns * self.card_size.x)) / 2
@@ -264,9 +286,13 @@ class Game(View):
             self.score_text.text = Game.defaultScoreText + str(self.score)
 
     def on_finish_game(self):
-        print("END GAME")
-        if(self.on_win):
-            self.on_win()
+        self.win_text.is_visible = True
+        self.cards.clear()
+        
+    def on_exit_game(self):
+        self.is_visible = False
+        if(self.on_exit):
+            self.on_exit()
 
     def on_draw(self, screen):
         for c in self.cards:
@@ -422,6 +448,10 @@ def wait_for_seconds(time):
     while timer < time:
         yield True
         timer += DELTA_TIME
+
+def exit():
+    global END
+    END = True
 
 #Call main, because Diogo told me to do so
 main()
