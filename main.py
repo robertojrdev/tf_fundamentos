@@ -11,16 +11,21 @@ def main():
     global DELTA_TIME
     pygame.init()
     pygame.font.init()
-    screen = pygame.display.set_mode((800,600))
+    screen = pygame.display.set_mode((int(800 * 1.5),int(600 * 1.5)))
 
+    
     views = []
+
     game = Game(screen, 3, 4)
+    game.is_visible = False
     views.append(game)
-    # menu = Menu(screen)
-    # views.append(menu)
-    r = Rect(vector2(200,200), vector2(100,100))
-    t = Text(screen, r)
-    views.append(t)
+
+    menu = Menu(screen, game)
+    views.append(menu)
+
+    # r = Rect(vector2(200,200), vector2(100,100))
+    # t = Text(screen, r)
+    # views.append(t)
 
     finishedRoutines = []
     lastTime = time.time()
@@ -35,6 +40,8 @@ def main():
             elif (event.type == pygame.KEYDOWN):
                 if (event.key == pygame.K_ESCAPE):
                     return
+                if (event.key == pygame.K_KP_ENTER):
+                    game.on_finish_game()
 
         Input.update(evt)
 
@@ -76,25 +83,36 @@ class View:
         self.is_visible = visible
 
 class Menu(View):
-    def __init__(self, screen):
+    def __init__(self, screen, game):
         super().__init__()
-        self.buttons = []
+        
+        self.game = game
+
         size = vector2(150, 50)
-        rows = 6
+        gameModes = [(4,3),(4,4),(5,4),(6,5),(6,6)]
+        rows = len(gameModes)
         dist_offset = 10
         offset = vector2()
         offset.x = (screen.get_width() - size.x)/2
         offset.y = (screen.get_height() - ((rows - 1) * dist_offset + rows * size.y)) / 2
 
-        for y in range(rows):
-            pos = vector2(offset.x, (y * (dist_offset + size.y) + offset.y))
-            b = TextButton(pos, size, "button", "4 X 4")
-            b.on_click = lambda b=self : b.set_visible(False)
-            self.buttons.append(b)
 
-    def on_draw(self, screen):
-        for b in self.buttons:
-            b.draw(screen)
+        for y in range(rows):
+            mode = gameModes[y]
+            pos = vector2(offset.x, (y * (dist_offset + size.y) + offset.y))
+            b = TextButton(pos, size, str(mode[0]) + " x " + str(mode[1]))
+            b.on_click = lambda menu=self, mode=mode : menu.start_game(mode)
+            self.childs.append(b)
+
+    def start_game(self, mode):
+        self.game.new_game(mode[0], mode[1])
+        self.is_visible = False
+        self.game.is_visible = True
+        self.game.on_win = lambda game=self.game, menu=self : menu.show_menu(game)
+
+    def show_menu(self, game):
+        self.is_visible = True
+        game.is_visible = False
 
 class Text(View):
     align_left = "left"
@@ -103,9 +121,8 @@ class Text(View):
     justify_up = "up"
     justify_center = "center"
     justify_bottom = "bottom"
-    def __init__(self, screen, rect, text = "Button", size = 25, color = (150,150,150)):
+    def __init__(self, rect, text = "Button", size = 25, color = (20,20,20)):
         super().__init__()
-        self.screen = screen
         self.rect = rect
         self.text = text
         self.size = size
@@ -118,7 +135,7 @@ class Text(View):
     def on_draw(self, screen):
         text = self.font.render(self.text, True, self.color)
         pos = self.get_position(text)
-        self.screen.blit(text, pos.as_tuple())
+        screen.blit(text, pos.as_tuple())
 
     def get_position(self, text):
         pos = self.rect.position
@@ -147,6 +164,8 @@ class Text(View):
         return pos
 
 class Game(View):
+    defaultScoreText = "Score: "
+
     def __init__(self, screen, rows = 0, columns=0):
         super().__init__()
         self.cards = []
@@ -154,6 +173,14 @@ class Game(View):
         self.cards_offset = 10
         self.card_size = vector2(50, 100)
         self.selected_cards = []
+        self.on_win = None
+        self.score = 0
+        self.wrong_attempts = 0
+
+        self.score_text = Text(Rect(vector2(20,20), vector2(150,50)), Game.defaultScoreText + str(self.score))
+        self.score_text.justify = Text.justify_up
+        self.score_text.align = Text.align_left
+        self.childs.append(self.score_text)
 
         if rows != 0 and columns != 0:
             self.new_game(rows, columns)
@@ -226,30 +253,37 @@ class Game(View):
             self.on_finish_game()
 
     def on_correct(self):
-        print("MUITO FÁCIL")
+        self.score += 100
+        self.score_text.text = Game.defaultScoreText + str(self.score)
 
     def on_wrong(self):
-        print("WRONG DUD")
+        self.wrong_attempts += 1
+        if self.wrong_attempts >= 2:
+            self.score -= 20 * self.wrong_attempts
+            if self.score < 0 : self.score = 0
+            self.score_text.text = Game.defaultScoreText + str(self.score)
 
     def on_finish_game(self):
         print("END GAME")
+        if(self.on_win):
+            self.on_win()
 
     def on_draw(self, screen):
         for c in self.cards:
             c.draw(screen)
 
-class Button:
-    def __init__(self, position, size, id, color = (150,150,150)):
+class Button(View):
+    def __init__(self, position, size, color = (150,150,150)):
+        super().__init__()
         self.position = position
         self.size = size
-        self.id = id
         self.color = color
         self.mouse_down_color = (0, 150, 0)
         self.mouse_down = False
         self.on_click = None
         self.outline = 0
 
-    def draw(self, screen):
+    def on_draw(self, screen):
         color = self.color
         hovering = self.is_hovering()
         if(hovering == True):
@@ -285,61 +319,18 @@ class Button:
             return False
 
 class TextButton(Button):
-    align_left = "left"
-    align_center = "center"
-    align_right = "right"
-    justify_up = "up"
-    justify_center = "center"
-    justify_bottom = "bottom"
-
-    def __init__(self, position, size, id, text = "Button", color = (150,150,150)):
-        super().__init__(position, size, id, color)
-        self.text = text
-        self.color = color
-        self.font_size = 30
-        self.font_color = (0,0,0)
-        self.align = TextButton.align_center
-        self.justify = TextButton.justify_center
-        self.offset = vector2()
-        self.font = pygame.font.Font(pygame.font.get_default_font(), 20)
-
-    def draw(self, screen):
-        super().draw(screen)
-        text = self.font.render(self.text, True, self.font_color)
-        pos = self.get_position(text)
-        screen.blit(text, pos.as_tuple())
-    
-    def get_position(self, text):
-        pos = vector2(self.position.x, self.position.y)
-
-        # OFFSET
-        pos += self.offset
-
-        # ALIGN
-        if(self.align == TextButton.align_center):
-            pos += vector2(self.size.x // 2, 0)
-            pos -= vector2(text.get_width() // 2, 0)
-        elif(self.align == TextButton.align_right):
-            pos += vector2(self.size.x, 0)
-            pos -= vector2(text.get_width(), 0)
-        
-        #JUSTIFY
-        if(self.justify == TextButton.justify_center):
-            pos += vector2(0, self.size.y // 2)
-            pos -= vector2(0, text.get_height() // 2)
-        elif(self.justify == TextButton.justify_bottom):
-            pos += vector2(0, self.size.y)
-            pos -= vector2(0, text.get_height())
-
-        return pos
+    def __init__(self, position, size, text = "Button", color = (150,150,150)):
+        super().__init__(position, size, color)
+        self.text = Text(Rect(position, size), text)
+        self.childs.append(self.text)
 
 class FigureButton(Button):
     shape_triangle = 0
     shape_square = 1
     shape_circle = 2
 
-    def __init__(self, position, size, id, text = "Button", color = (150,150,150)):
-        super().__init__(position, size, id, color)
+    def __init__(self, position, size, text = "Button", color = (150,150,150)):
+        super().__init__(position, size, color)
         self.shape_visible = False
         self.shape = FigureButton.shape_square
         self.shape_color = (0,0,0)
