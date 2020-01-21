@@ -1,3 +1,4 @@
+import sys
 from vector2 import vector2
 from view import View
 from text_button import TextButton
@@ -32,7 +33,7 @@ class Menu(View):
         #CREATE EXIT BUTTON
         pos = vector2(offset.x, ((rows +1) * (dist_offset + size.y) + offset.y))
         exit_button = TextButton(pos, size, "Exit")
-        exit_button.on_click = lambda : exit()
+        exit_button.on_click = lambda : sys.exit()
         self.childs.append(exit_button)
 
         #CREATE IMAGE

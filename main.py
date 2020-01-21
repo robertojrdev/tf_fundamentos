@@ -1,5 +1,7 @@
 import pygame
 import time
+import sys
+import traceback
 from menu import Menu
 from input import Input
 from game import Game
@@ -8,7 +10,6 @@ from routines import Routine
 END = False
 
 def main():
-    global END
     pygame.init()
     pygame.font.init()
     screen = pygame.display.set_mode((1200 ,700))
@@ -26,7 +27,7 @@ def main():
     views.append(menu)
 
     lastTime = time.time()
-    while(END == False):
+    while(True):
         # Process OS events
         evt = pygame.event.get()
         for event in evt:
@@ -63,10 +64,6 @@ def main():
             v = next(r, False)
             if(v == False) :
                 Routine.routines.remove(r)
-
-def exit():
-    global END
-    END = True
 
 #Call main, because Diogo told me to do so
 main()

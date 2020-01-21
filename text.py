@@ -19,7 +19,7 @@ class Text(View):
         self.justify = Text.justify_center
         self.align = Text.align_center
         self.offset = vector2()
-        self.font = pygame.font.Font(pygame.font.get_default_font(), 20)
+        self.font = pygame.font.Font("NotoSans-Regular.ttf", 20)
 
     def on_draw(self, screen):
         text = self.font.render(self.text, True, self.color)
